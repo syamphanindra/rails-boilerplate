@@ -1,0 +1,62 @@
+Use this README file to introduce your application and point to useful places in the API for learning more.
+Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+== Guide for setting
+__________________________________________
+Set the database.yml with the required username and password
+
+__________________________________________
+Then run "bundle exec rake db:create" // This will pick dbname from database.yml
+
+__________________________________________
+Create a folder "migrate" under db
+
+__________________________________________
+rails generate migration CreateUsers
+rails generate migration CreateRoles etc..
+the migration is plural CreateBurgers, but the model should be a singular "Burger".
+https://medium.com/@anniemester/using-rake-database-commands-1888cab597ca
+__________________________________________
+rake db:migrate
+//If You will encounter a error during this like
+#Mysql2::Error: All parts of a PRIMARY KEY must be NOT NULL; if you need NULL in a key, use UNIQUE instead
+Fix for this is:
+https://stackoverflow.com/questions/40758226/mysql2error-all-parts-of-a-primary-key-must-be-not-null-if-you-need-null-in
+and rern "rake db:migrate"
+
+__________________________________________
+
+After that you will encounter error when you run "bundle exec rails s"
+`establish_connection': database configuration specifies nonexistent mysql2 adapter (ActiveRecord::AdapterNotFound)
+
+add following line in your envrionment.rb file. require File.expand_path('../initializers/abstract_mysql2_adapter', __FILE__)
+
+
+
+_____________________________________________
+.permit(*) setting
+It required gem gem 'strong_parameters', '0.2.3'
+and need to add
+"config.action_controller.action_on_unpermitted_parameters = :raise" in config/application.rb
+and in appliation_controller.rb
+add "rescue_from ActionController::UnpermittedParameters, with: :invalid_field_handler" at top
+and write implementation of invalid_field_handler to render error
+_________________________________________________
+
+Validator in rails
+create UserValidation class example
+and import   "include ActiveModel::Validations"
+  "include ActiveModel::Validations::Callbacks"
+  and call like "UserValidation.new"
+  isvalid = user.valid?
+
+____________________________________________________
+Delegator
+class UserDelegator < BaseDelegator
+Create a Base Delegator
+SimpleDelegator along with   include ActiveModel::Validations
+user_delegator = UserDelegator.new(@user)
+unless user_delegator.valid?(params[:action])
+  render_errors(user_delegator) && return
+end
+___________________________________________________

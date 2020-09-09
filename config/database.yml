@@ -1,0 +1,23 @@
+#give your database name here along with mysql db username and password
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: boilerplate
+  pool: 5
+  host: 127.0.0.1
+  username: root
+  password:
+  reconnect: true
+
+#Add this config later as of your use
+test:
+  adapter: mysql2
+  database: test-boilerplate
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: mysql2
+  database: prod-boilerplate
+  pool: 5
+  timeout: 5000
